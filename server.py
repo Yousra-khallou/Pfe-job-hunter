@@ -659,3 +659,8 @@ async def personalization_status(app_id: str):
         "folder_path": folder,
         "offer_analysis": getattr(app_obj, "offer_analysis", None),
     }
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("server:app", host="127.0.0.1", port=8000, reload=True)
+
