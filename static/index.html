@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobAgent.AI | Supervision Locale</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-main: #f4f6fa;
+            --bg-sidebar: #0b1728;
+            --bg-sidebar-active: #1d68f5;
+            --bg-card: #ffffff;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --text-light: #f8fafc;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border-color: #e2e8f0;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            height: 100vh;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .app-layout {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* SIDEBAR - EXACTE DU SCREENSHOT */
+        .sidebar {
+            width: 250px;
+            background-color: var(--bg-sidebar);
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex-shrink: 0;
+            border-right: 1px solid rgba(255,255,255,0.06);
+            user-select: none;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon-box {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #0ea5e9, #2563eb);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 16px;
+        }
+
+        .brand-name {
+            font-size: 19px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.4px;
+        }
+
+        .brand-name span { color: #38bdf8; }
+
+        .sidebar-menu {
+            padding: 10px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex-grow: 1;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 11px 16px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: all 0.15s ease;
+        }
+
+        .menu-item-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .menu-item-left i {
+            font-size: 15px;
+            width: 18px;
+            text-align: center;
+        }
+
+        .menu-item:hover {
+            background-color: rgba(255,255,255,0.06);
+            color: #ffffff;
+        }
+
+        .menu-item.active {
+            background-color: var(--bg-sidebar-active);
+            color: #ffffff;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(29, 104, 245, 0.35);
+        }
+
+        .menu-badge {
+            background-color: #ef4444;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 700;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .footer-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .footer-link:hover { color: #ffffff; }
+
+        /* CONTENU PRINCIPAL */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            background-color: var(--bg-main);
+        }
+
+        .content-wrapper {
+            padding: 26px 36px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        /* TOP HEADER */
+        .top-header-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+
+        .header-titles {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .kicker {
+            font-size: 11px;
+            font-weight: 700;
+            color: #94a3b8;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .main-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-dark);
+            letter-spacing: -0.5px;
+        }
+
+        .session-secure-pill {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 12px;
+            color: #15803d;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+
+        .secure-dot {
+            width: 7px;
+            height: 7px;
+            background-color: #10b981;
+            border-radius: 50%;
+        }
+
+        /* BANNIERE BLANCHE (AGENT ACTIVÉ, MODE AUTO) */
+        .agent-banner-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 16px 24px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .banner-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .agent-live-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13.5px;
+            color: #334155;
+        }
+
+        .status-green-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 6px rgba(16,185,129,0.6);
+        }
+
+        .agent-name-text {
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .agent-state-active {
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .mode-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748b;
+        }
+
+        .mode-badge-auto {
+            background-color: #d1fae5;
+            color: #065f46;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .banner-right-metrics {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .metric-inline {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .metric-inline strong {
+            font-size: 17px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-right: 4px;
+        }
+
+        /* 9 CARTES KPI (EXACTEMENT 2 LIGNES AVEC BORDURES COLOREES FINES) */
+        .kpi-section {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .kpi-row-5 {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 14px;
+        }
+
+        .kpi-row-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .kpi-box {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 98px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .kpi-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .kpi-box-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #475569;
+            line-height: 1.3;
+        }
+
+        .kpi-box-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1;
+            margin-top: 10px;
+        }
+
+        /* BORDURES FINES EXACTES DE LA MAQUETTE */
+        .border-blue    { border: 1.5px solid #2563eb; }
+        .border-sky     { border: 1.5px solid #0ea5e9; }
+        .border-amber   { border: 1.5px solid #f59e0b; }
+        .border-coral   { border: 1.5px solid #f43f5e; }
+        .border-crimson { border: 1.5px solid #e11d48; }
+        .border-green   { border: 1.5px solid #10b981; }
+        .border-indigo  { border: 1.5px solid #3b82f6; }
+        .border-red     { border: 1.5px solid #ef4444; }
+        .border-purple  { border: 1.5px solid #8b5cf6; }
+
+        /* SECTION "À TRAITER MAINTENANT" */
+        .panel-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            padding: 22px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .panel-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .panel-header-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .panel-header-link {
+            font-size: 13px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .panel-header-link:hover { text-decoration: underline; }
+
+        .panel-items-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .queue-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+
+        .queue-row:last-child { border-bottom: none; }
+        .queue-row:hover { background-color: #f8fafc; }
+
+        .queue-row-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .queue-avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #e0f2fe;
+            color: #0369a1;
+            font-weight: 700;
+            font-size: 14px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .queue-info h4 {
+            font-size: 14.5px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .queue-subtext {
+            font-size: 12.5px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .queue-row-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .match-tag-hot {
+            background-color: #ffe4e6;
+            color: #e11d48;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .status-pill-valider {
+            background-color: #e0e7ff;
+            color: #3730a3;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-jan2027 {
+            background-color: #ecfdf5;
+            color: #047857;
+            border: 1px solid #a7f3d0;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .badge-flexible {
+            background-color: #f0f9ff;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 7px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .badge-applied {
+            background-color: #e0e7ff;
+            color: #3730a3;
+            border: 1px solid #c7d2fe;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .status-badge-examiner {
+            background-color: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+
+        .status-badge-postuler {
+            background-color: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+
+        .status-badge-envoyee {
+            background-color: #dcfce7;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+
+        .status-badge-refus {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+
+        .filter-pill {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-pill:hover {
+            border-color: #94a3b8;
+            background: #f8fafc;
+        }
+
+        .filter-pill.active {
+            background: #2563eb;
+            color: #ffffff;
+            border-color: #2563eb;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+        }
+
+        .filter-pill.active .pill-count {
+            background: rgba(255,255,255,0.25);
+            color: #ffffff;
+        }
+
+        .pill-count {
+            background: #f1f5f9;
+            color: #475569;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 10px;
+        }
+
+        .status-select {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11.5px;
+            font-weight: 600;
+            border: 1px solid #cbd5e1;
+            background-color: #ffffff;
+            cursor: pointer;
+        }
+
+        .date-text {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        /* GESTION DES ONGLETS */
+        .tab-view { display: none; }
+        .tab-view.active {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* BOUTONS ET TABLEAUX */
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.15s ease;
+        }
+
+        .btn-primary { background-color: var(--primary); color: #ffffff; }
+        .btn-primary:hover { background-color: var(--primary-hover); }
+        .btn-success { background-color: var(--success); color: #ffffff; }
+        .btn-outline { background-color: transparent; border: 1px solid var(--border-color); color: var(--text-dark); }
+        .btn-outline:hover { background-color: #f1f5f9; }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 13.5px;
+        }
+
+        .data-table th, .data-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-table th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 11.5px;
+            text-transform: uppercase;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group.col-span-2 { grid-column: span 2; }
+
+        .form-group label {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 13.5px;
+            outline: none;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--primary);
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.hidden { display: none !important; }
+
+        .modal-card {
+            background-color: #ffffff;
+            width: 90%;
+            max-width: 800px;
+            max-height: 85vh;
+            border-radius: 14px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            font-size: 18px;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+            background-color: #f8fafc;
+        }
+
+        #toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .toast {
+            background-color: #0f172a;
+            color: #ffffff;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+        <!-- SIDEBAR - EXACTE REPLIQUE DU SCREENSHOT -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand-icon-box">
+                    <i class="fa-solid fa-shapes"></i>
+                </div>
+                <div class="brand-name">
+                    JobAgent<span>.AI</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+                <a href="#" class="menu-item active" data-tab="overview">
+                    <div class="menu-item-left">
+                        <i class="fa-regular fa-compass"></i>
+                        <span>Vue d'ensemble</span>
+                    </div>
+                </a>
+
+                <a href="#" class="menu-item" data-tab="conversations">
+                    <div class="menu-item-left">
+                        <i class="fa-regular fa-comments"></i>
+                        <span>Conversations</span>
+                    </div>
+                    <span class="menu-badge" id="sidebar-badge-count">3</span>
+                </a>
+
+                <a href="#" class="menu-item" data-tab="crm">
+                    <div class="menu-item-left">
+                        <i class="fa-regular fa-gem"></i>
+                        <span>CRM</span>
+                    </div>
+                </a>
+
+                <a href="#" class="menu-item" data-tab="relances">
+                    <div class="menu-item-left">
+                        <i class="fa-solid fa-arrow-trend-up"></i>
+                        <span>Relances</span>
+                    </div>
+                </a>
+
+                <a href="#" class="menu-item" data-tab="activity">
+                    <div class="menu-item-left">
+                        <i class="fa-solid fa-bars-staggered"></i>
+                        <span>Activité</span>
+                    </div>
+                </a>
+
+                <a href="#" class="menu-item" data-tab="control">
+                    <div class="menu-item-left">
+                        <i class="fa-solid fa-sliders"></i>
+                        <span>Agent Control</span>
+                    </div>
+                </a>
+
+                <a href="#" class="menu-item" data-tab="profile">
+                    <div class="menu-item-left">
+                        <i class="fa-regular fa-id-card"></i>
+                        <span>Mon Profil & CV</span>
+                    </div>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#" class="footer-link" onclick="switchTab('profile'); return false;">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>Yousra Khallou (ENSAH)</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- CONTENU PRINCIPAL -->
+        <main class="main-content">
+            <div class="content-wrapper">
+
+                <!-- HEADER DU HAUT -->
+                <div class="top-header-row">
+                    <div class="header-titles">
+                        <span class="kicker">SUPERVISION LOCALE</span>
+                        <h1 class="main-title" id="page-main-title">Vue d'ensemble</h1>
+                    </div>
+                    <div class="session-secure-pill">
+                        <span class="secure-dot"></span>
+                        <span>Session sécurisée</span>
+                    </div>
+                </div>
+
+                <!-- ONGLET 1 : VUE D'ENSEMBLE (SCREENSHOT 100% CONFORME) -->
+                <section id="view-overview" class="tab-view active">
+                    <!-- STATUS BANNER BLANCHE -->
+                    <div class="agent-banner-card">
+                        <div class="banner-left">
+                            <div class="agent-live-status">
+                                <span class="status-green-dot"></span>
+                                <span class="agent-name-text">Agent PFE Data & IA</span>
+                                <span class="agent-state-active">Activé</span>
+                            </div>
+                            <div class="mode-group">
+                                <span>MODE GLOBAL</span>
+                                <span class="mode-badge-auto" id="banner-mode-badge">AUTO</span>
+                            </div>
+                        </div>
+
+                        <div class="banner-right-metrics">
+                            <div class="metric-inline">
+                                <strong id="metric-conversations-open">36</strong> conversations ouvertes
+                            </div>
+                            <div class="metric-inline">
+                                <strong id="metric-ia-replies">23</strong> réponses IA aujourd'hui
+                            </div>
+                            <div class="metric-inline">
+                                <strong id="metric-human-replies">0</strong> réponses humaines aujourd'hui
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 9 CARTES KPI AVEC BORDURES COLOREES FINES EXACTES DE LA MAQUETTE -->
+                    <div class="kpi-section">
+                        <!-- Ligne 1 : 5 Cartes -->
+                        <div class="kpi-row-5">
+                            <div class="kpi-box border-blue">
+                                <div class="kpi-box-label">Nouveaux contacts aujourd'hui</div>
+                                <div class="kpi-box-value" id="kpi-new-contacts">6</div>
+                            </div>
+
+                            <div class="kpi-box border-sky">
+                                <div class="kpi-box-label">Conversations actives aujourd'hui</div>
+                                <div class="kpi-box-value" id="kpi-active-convs">7</div>
+                            </div>
+
+                            <div class="kpi-box border-amber">
+                                <div class="kpi-box-label">Conversations non lues</div>
+                                <div class="kpi-box-value" id="kpi-unread-convs">9</div>
+                            </div>
+
+                            <div class="kpi-box border-coral">
+                                <div class="kpi-box-label">Sans réponse</div>
+                                <div class="kpi-box-value" id="kpi-no-reply">11</div>
+                            </div>
+
+                            <div class="kpi-box border-crimson">
+                                <div class="kpi-box-label">Prospects HOT</div>
+                                <div class="kpi-box-value" id="kpi-hot-prospects">3</div>
+                            </div>
+                        </div>
+
+                        <!-- Ligne 2 : 4 Cartes -->
+                        <div class="kpi-row-4">
+                            <div class="kpi-box border-green">
+                                <div class="kpi-box-label">Réponses à valider</div>
+                                <div class="kpi-box-value" id="kpi-to-validate">3</div>
+                            </div>
+
+                            <div class="kpi-box border-indigo">
+                                <div class="kpi-box-label">Relances aujourd'hui</div>
+                                <div class="kpi-box-value" id="kpi-followups-today">1</div>
+                            </div>
+
+                            <div class="kpi-box border-red">
+                                <div class="kpi-box-label">Relances en retard</div>
+                                <div class="kpi-box-value" id="kpi-followups-late">5</div>
+                            </div>
+
+                            <div class="kpi-box border-purple">
+                                <div class="kpi-box-label">Human takeover actifs</div>
+                                <div class="kpi-box-value" id="kpi-human-takeover">13</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION "À TRAITER MAINTENANT" -->
+                    <div class="panel-card">
+                        <div class="panel-header-row" style="flex-wrap: wrap; gap: 10px;">
+                            <div>
+                                <h3 class="panel-header-title">À traiter maintenant (Campagne PFE 2026/2027)</h3>
+                                <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Opportunités récentes issues du Web & LinkedIn Live</div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <button class="btn btn-outline" style="font-size: 12px; padding: 5px 12px; color: #dc2626; border-color: #fca5a5;" onclick="clearAllOldOffers()">
+                                    <i class="fa-solid fa-trash-can"></i> Vider anciennes offres
+                                </button>
+                                <button class="btn btn-primary" id="btn-live-scan-header" style="font-size: 12px; padding: 5px 14px; background: linear-gradient(135deg, #0284c7, #2563eb);" onclick="triggerLiveWebScan()">
+                                    <i class="fa-solid fa-bolt"></i> ⚡ Scanner le Web (2026/2027)
+                                </button>
+                                <a href="#" class="panel-header-link" onclick="switchTab('conversations'); return false;" style="margin-left: 6px;">Toutes les conversations</a>
+                            </div>
+                        </div>
+
+                        <!-- BARRE DE FILTRES : STATUT & DATE DE DÉBUT JANVIER 2027 & DÉDUPLICATION -->
+                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding: 10px 0; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; margin-top: 4px;">
+                            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;" id="status-filter-pills">
+                                <button class="filter-pill active" onclick="setAppFilterStatus('all', this)">
+                                    <span>Toutes</span> <span class="pill-count" id="count-all">0</span>
+                                </button>
+                                <button class="filter-pill" onclick="setAppFilterStatus('a_examiner', this)">
+                                    <i class="fa-solid fa-magnifying-glass" style="font-size: 11px; color: #d97706;"></i>
+                                    <span>À examiner</span> <span class="pill-count" id="count-examiner">0</span>
+                                </button>
+                                <button class="filter-pill" onclick="setAppFilterStatus('a_postuler', this)">
+                                    <i class="fa-solid fa-thumbtack" style="font-size: 11px; color: #0284c7;"></i>
+                                    <span>À postuler</span> <span class="pill-count" id="count-postuler">0</span>
+                                </button>
+                                <button class="filter-pill" onclick="setAppFilterStatus('candidature_envoyee', this)">
+                                    <i class="fa-solid fa-paper-plane" style="font-size: 11px; color: #16a34a;"></i>
+                                    <span>Candidatures envoyées</span> <span class="pill-count" id="count-envoyees">0</span>
+                                </button>
+                                <button class="filter-pill" onclick="setAppFilterStatus('refus', this)">
+                                    <i class="fa-solid fa-ban" style="font-size: 11px; color: #dc2626;"></i>
+                                    <span>Refus</span> <span class="pill-count" id="count-refus">0</span>
+                                </button>
+                            </div>
+
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <button class="filter-pill" id="btn-filter-jan2027" onclick="toggleJanvier2027Filter(this)" style="border-color: #a7f3d0; background: #f0fdf4; color: #047857;" title="Filtrer pour afficher uniquement les offres avec date de début Janvier 2027">
+                                    <span>🚀 Début Janvier 2027</span> <span class="pill-count" id="count-jan2027" style="background: #bbf7d0; color: #065f46;">0</span>
+                                </button>
+                                <button class="btn btn-outline" onclick="runDeduplication()" style="font-size: 12px; padding: 5px 12px; border-color: #cbd5e1;" title="Fusionner les doublons trouvés sur LinkedIn, sites carrières et job boards">
+                                    <i class="fa-solid fa-filter-circle-xmark"></i> Dédupliquer les offres
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="panel-items-list" id="queue-container">
+                            <!-- Items injectés par app.js -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ONGLET 2 : CONVERSATIONS / CANDIDATURES -->
+                <section id="view-conversations" class="tab-view">
+                    <div class="panel-card">
+                        <div class="panel-header-row">
+                            <h3 class="panel-header-title">Toutes les Conversations & Candidatures</h3>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="text" id="filter-search-conv" placeholder="Rechercher une entreprise ou un contact..." oninput="filterConversationsTable()" style="padding: 6px 12px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 13px; width: 280px;">
+                            </div>
+                        </div>
+
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Entreprise</th>
+                                    <th>Poste recherché</th>
+                                    <th>Contact RH</th>
+                                    <th>Match IA</th>
+                                    <th>Statut</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="conversations-table-body">
+                                <!-- Lignes injectées -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ONGLET 3 : CRM -->
+                <section id="view-crm" class="tab-view">
+                    <div class="panel-card">
+                        <div class="panel-header-row">
+                            <h3 class="panel-header-title">Pipeline CRM Candidatures PFE</h3>
+                            <span style="font-size: 13px; color: var(--text-muted);">Suivi visuel de vos opportunités par étape</span>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 10px;" id="crm-columns-container">
+                            <!-- Colonnes CRM injectées -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ONGLET 4 : RELANCES -->
+                <section id="view-relances" class="tab-view">
+                    <div class="panel-card">
+                        <div class="panel-header-row">
+                            <h3 class="panel-header-title">Planificateur Intelligent des Relances</h3>
+                            <span style="font-size: 13px; color: var(--text-muted);">Relances après 7 et 14 jours sans réponse</span>
+                        </div>
+                        <div class="panel-items-list" id="relances-list-container">
+                            <!-- Lignes de relances injectées -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ONGLET 5 : ACTIVITE & LOGS -->
+                <section id="view-activity" class="tab-view">
+                    <div class="panel-card">
+                        <div class="panel-header-row">
+                            <h3 class="panel-header-title">Journal d'Activité de l'Agent IA</h3>
+                            <span style="font-size: 13px; color: var(--text-muted);">Traçabilité complète des actions</span>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Heure</th>
+                                    <th>Agent</th>
+                                    <th>Action</th>
+                                    <th>Détail</th>
+                                </tr>
+                            </thead>
+                            <tbody id="activity-table-body">
+                                <!-- Logs injectés -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ONGLET 6 : AGENT CONTROL -->
+                <!-- ONGLET 6 : AGENT CONTROL & COMPTES REELS -->
+                <section id="view-control" class="tab-view">
+                    <!-- CARTE 1 : CONNEXION GMAIL REELLE (ENVOI DIRECT & IMAP) -->
+                    <div class="panel-card" style="border: 2px solid #3b82f6; background: #ffffff;">
+                        <div class="panel-header-row">
+                            <div>
+                                <h3 class="panel-header-title" style="color: #1e40af;"><i class="fa-solid fa-envelope-circle-check"></i> Connexion Réelle Boîte Gmail (Envoi Direct & Lecture des Alertes)</h3>
+                                <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Permet à l'agent d'envoyer vos candidatures directement depuis votre boîte avec votre CV joint, et de lire vos alertes RH.</p>
+                            </div>
+                            <span id="gmail-status-badge" style="background: #fef3c7; color: #92400e; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700;">
+                                ⚪ Non connecté
+                            </span>
+                        </div>
+
+                        <div class="form-grid" style="margin-top: 12px;">
+                            <div class="form-group">
+                                <label>Votre Adresse Gmail :</label>
+                                <input type="email" id="cfg-gmail-user" value="khallouyoussra84@gmail.com" placeholder="votre_email@gmail.com">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Mot de Passe d'Application Google (16 lettres) :</label>
+                                <input type="password" id="cfg-gmail-pass" placeholder="xxxx xxxx xxxx xxxx">
+                            </div>
+
+                            <div class="form-group col-span-2" style="background: #eff6ff; padding: 12px 16px; border-radius: 8px; border-left: 3px solid #2563eb; font-size: 12.5px; color: #1e40af;">
+                                <strong>💡 Comment obtenir votre mot de passe d'application Google en 30 secondes :</strong><br>
+                                1. Rendez-vous sur la page sécurisée de Google : <a href="https://myaccount.google.com/apppasswords" target="_blank" style="color: #2563eb; font-weight: 700;">myaccount.google.com/apppasswords</a>.<br>
+                                2. Donnez un nom (ex: <em>JobAgent</em>) et cliquez sur <em>Créer</em>.<br>
+                                3. Copiez le code de 16 lettres généré et collez-le ci-dessus. Vos e-mails partiront alors directement de votre boîte !
+                            </div>
+
+                            <div class="form-group col-span-2">
+                                <div style="display: flex; gap: 10px;">
+                                    <button class="btn btn-primary" onclick="saveGmailCredentials()">
+                                        <i class="fa-solid fa-floppy-disk"></i> Enregistrer mes identifiants Gmail
+                                    </button>
+                                    <button class="btn btn-outline" onclick="testGmailConnection()" id="btn-test-gmail">
+                                        <i class="fa-solid fa-plug"></i> Tester la connexion Gmail en direct
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARTE 2 : PARAMETRES RECHERCHE AUTONOME -->
+                    <div class="panel-card" style="margin-top: 16px;">
+                        <div class="panel-header-row">
+                            <h3 class="panel-header-title">Paramètres de Veille & Périmètre Géographique</h3>
+                            <button class="btn btn-primary" onclick="saveAgentSettings()">
+                                <i class="fa-solid fa-floppy-disk"></i> Enregistrer Paramètres
+                            </button>
+                        </div>
+
+                        <div class="form-grid" style="margin-top: 10px;">
+                            <div class="form-group">
+                                <label>Mode Opérationnel :</label>
+                                <select id="ctrl-mode-select">
+                                    <option value="AUTO">AUTO (Veille autonome active)</option>
+                                    <option value="SEMI-AUTO">SEMI-AUTO (Validation humaine obligatoire)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Intervalle de scan (Heures) :</label>
+                                <input type="number" id="ctrl-interval-input" value="4" min="1" max="24">
+                            </div>
+
+                            <div class="form-group col-span-2">
+                                <label>Mots-clés de recherche PFE (National & International) :</label>
+                                <input type="text" id="ctrl-keywords-input" value="Data Engineer, LLM Engineer, Machine Learning, RAG, PySpark, FastAPI, Stage PFE 2027, End of Studies Internship">
+                            </div>
+
+                            <div class="form-group col-span-2">
+                                <label>Localisations ciblées :</label>
+                                <input type="text" id="ctrl-locations-input" value="Maroc, Casablanca, Rabat, France, Paris, Remote / Télétravail, Europe, International">
+                            </div>
+
+                            <div class="form-group col-span-2">
+                                <label>Entreprises Ciblées en Priorité (séparées par virgules) :</label>
+                                <input type="text" id="ctrl-target-companies-input" value="Capgemini, Thales, Orange, Inetum, DXC Technology, DATAPROTECT, Leyton, Société Générale" placeholder="Ex: Capgemini, Thales, Orange...">
+                            </div>
+
+                            <div class="form-group col-span-2">
+                                <label>Actions d'Acquisition Immédiate :</label>
+                                <div style="display: flex; gap: 12px; margin-top: 6px;">
+                                    <button class="btn btn-primary" onclick="triggerImmediateScan()" id="btn-trigger-scan">
+                                        <i class="fa-solid fa-bolt"></i> Lancer la recherche multi-sources en direct
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ONGLET 7 : MON PROFIL & CV (SIMPLE ET CLAIR) -->
+                <section id="view-profile" class="tab-view">
+                    <div class="panel-card">
+                        <div class="panel-header-row">
+                            <h3 class="panel-header-title">Mon Profil Candidat & Mes Documents de Référence</h3>
+                            <button class="btn btn-primary" onclick="saveProfileData()">
+                                <i class="fa-solid fa-floppy-disk"></i> Enregistrer Profil
+                            </button>
+                        </div>
+
+                        <!-- 2 CARTES SIMPLES : CV PDF + GITHUB -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 10px 0 20px 0;">
+                            <!-- Boîte CV PDF -->
+                            <div style="border: 1.5px dashed var(--border-color); border-radius: 10px; padding: 20px; background: #fafafa; display: flex; flex-direction: column; gap: 10px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <i class="fa-solid fa-file-pdf" style="font-size: 24px; color: #ef4444;"></i>
+                                    <strong>Importer mon CV de référence (PDF)</strong>
+                                </div>
+                                <p style="font-size: 12.5px; color: var(--text-muted);">L'IA extrait automatiquement vos compétences, formations et projets pour les adapter à chaque offre.</p>
+                                <input type="file" id="profile-pdf-input" accept=".pdf" style="margin-top: 4px;">
+                                <button class="btn btn-success" onclick="uploadProfilePdf()" id="btn-upload-pdf" style="align-self: flex-start; margin-top: 4px;">
+                                    <i class="fa-solid fa-upload"></i> Analyser & Remplir automatiquement
+                                </button>
+                            </div>
+
+                            <!-- Boîte GitHub -->
+                            <div style="border: 1.5px dashed var(--border-color); border-radius: 10px; padding: 20px; background: #fafafa; display: flex; flex-direction: column; gap: 10px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <i class="fa-brands fa-github" style="font-size: 24px; color: #0f172a;"></i>
+                                    <strong>Synchroniser mon GitHub & Portfolio</strong>
+                                </div>
+                                <p style="font-size: 12.5px; color: var(--text-muted);">Récupère vos dépôts réels pour sélectionner le projet le plus pertinent pour chaque entreprise.</p>
+                                <div style="display: flex; gap: 8px;">
+                                    <input type="text" id="profile-github-user" value="yousra-khallou" placeholder="Pseudo GitHub..." style="flex: 1; padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 13px;">
+                                    <button class="btn btn-outline" onclick="syncProfileGithub()" id="btn-sync-gh">
+                                        <i class="fa-solid fa-rotate"></i> Synchroniser
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Formulaire Infos -->
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Nom & Prénom :</label>
+                                <input type="text" id="form-name" value="Yousra Khallou">
+                            </div>
+                            <div class="form-group">
+                                <label>Titre & Objectif :</label>
+                                <input type="text" id="form-title" value="Élève Ingénieure en Data Engineering & IA (ENSAH) - Stage PFE 6 mois">
+                            </div>
+                            <div class="form-group">
+                                <label>Email :</label>
+                                <input type="email" id="form-email" value="khallouyoussra84@gmail.com">
+                            </div>
+                            <div class="form-group">
+                                <label>Téléphone :</label>
+                                <input type="text" id="form-phone" value="+212 691373401">
+                            </div>
+                            <div class="form-group">
+                                <label>Lien Profil LinkedIn :</label>
+                                <input type="text" id="form-linkedin" value="https://www.linkedin.com/in/yousra-khallou">
+                            </div>
+                            <div class="form-group">
+                                <label>Lien Portfolio / Site Personnel :</label>
+                                <input type="text" id="form-portfolio" placeholder="https://votre-portfolio.com">
+                            </div>
+                            <div class="form-group col-span-2">
+                                <label>Compétences Clés (séparées par virgules) :</label>
+                                <textarea id="form-skills" rows="2">Python, SQL, Apache Spark, Kafka, Apache Airflow, LLM, RAG, Qdrant, FastAPI, Docker, dbt, PostgreSQL</textarea>
+                            </div>
+                            <div class="form-group col-span-2">
+                                <label>Modèle ou Style de Lettre de Motivation de référence (optionnel) :</label>
+                                <textarea id="form-sample-cover-letter" rows="4" placeholder="Collez ici un exemple de lettre de motivation que vous avez déjà utilisée afin que l'IA adopte votre style et votre ton personnel..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL SIMPLE DE REVISION & VALIDATION MULTI-DOCUMENTS -->
+    <div class="modal-overlay hidden" id="review-modal">
+        <div class="modal-card" style="max-width: 780px;">
+            <div class="modal-header">
+                <div>
+                    <h3 id="modal-app-company" style="font-size: 18px; font-weight: 700; color: #0f172a;">Capgemini Engineering</h3>
+                    <div id="modal-app-job" style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Stage Data & IA</div>
+                </div>
+                <button class="modal-close" onclick="closeReviewModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <!-- ONGLETS DE NAVIGATION DANS LA MODALE -->
+            <div style="display: flex; gap: 8px; padding: 10px 24px 0 24px; border-bottom: 1px solid var(--border-color); background: #f8fafc;">
+                <button class="btn btn-outline modal-tab-btn active" id="tab-btn-email" onclick="switchModalTab('email')" style="padding: 6px 14px; font-size: 12.5px; font-weight: 600;">
+                    <i class="fa-solid fa-envelope"></i> Email d'approche
+                </button>
+                <button class="btn btn-outline modal-tab-btn" id="tab-btn-letter" onclick="switchModalTab('letter')" style="padding: 6px 14px; font-size: 12.5px; font-weight: 600;">
+                    <i class="fa-solid fa-file-lines"></i> Lettre de Motivation Sur-Mesure
+                </button>
+                <button class="btn btn-outline modal-tab-btn" id="tab-btn-cv" onclick="switchModalTab('cv')" style="padding: 6px 14px; font-size: 12.5px; font-weight: 600;">
+                    <i class="fa-solid fa-user-gear"></i> Adaptation CV & Projets GitHub
+                </button>
+                <button class="btn btn-outline modal-tab-btn" id="tab-btn-tailor" onclick="switchModalTab('tailor')" style="padding: 6px 14px; font-size: 12.5px; font-weight: 600; background: linear-gradient(135deg, #f0fdf4, #dcfce7); border-color: #86efac; color: #15803d;">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> CV &amp; Lettre PDF
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <!-- VUE 1 : EMAIL -->
+                <div id="modal-view-email">
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label>Destinataire RH :</label>
+                        <input type="email" id="modal-app-email" style="font-weight: 600; color: var(--primary);">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label>Objet de l'Email :</label>
+                        <input type="text" id="modal-app-subject" style="font-weight: 600;">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Corps du Message Rédigé par l'IA :</label>
+                        <textarea id="modal-app-body" rows="9" style="line-height: 1.6; font-size: 13.5px;"></textarea>
+                    </div>
+                </div>
+
+                <!-- VUE 2 : LETTRE DE MOTIVATION -->
+                <div id="modal-view-letter" class="hidden">
+                    <div class="form-group">
+                        <label>Lettre de Motivation Personnalisée pour cette Entreprise :</label>
+                        <textarea id="modal-app-cover-letter" rows="12" style="line-height: 1.6; font-size: 13.5px;"></textarea>
+                    </div>
+                </div>
+
+                <!-- VUE 3 : ADAPTATION CV -->
+                <div id="modal-view-cv" class="hidden">
+                    <div class="form-group">
+                        <label>Projets GitHub & Compétences Clés Recommandés pour ce Poste :</label>
+                        <textarea id="modal-app-cv-summary" rows="12" style="line-height: 1.6; font-size: 13.5px; background: #fafafa; font-family: monospace;"></textarea>
+                    </div>
+                </div>
+                <!-- VUE 4 : PERSONNALISATION CV & LETTRE PDF -->
+                <div id="modal-view-tailor" class="hidden">
+                    <div id="tailor-status-banner" style="border-radius: 10px; padding: 12px 16px; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; font-size: 13px; background: #f1f5f9; border: 1px solid #e2e8f0;">
+                        <i class="fa-solid fa-circle-info" style="color: #64748b;"></i>
+                        <span id="tailor-status-text">Cliquez sur &laquo;&nbsp;G&eacute;n&eacute;rer&nbsp;&raquo; pour cr&eacute;er votre CV et Lettre personnalis&eacute;s PDF pour cette offre.</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div style="border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 16px; background: #fafafa;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                                <div>
+                                    <div style="font-weight: 700; font-size: 13.5px; color: #0f172a; margin-bottom: 3px;">
+                                        <i class="fa-solid fa-wand-magic-sparkles" style="color: #2563eb;"></i>
+                                        Personnalisation IA sur-mesure
+                                    </div>
+                                    <div style="font-size: 12px; color: #64748b;">Adapte votre CV ma&icirc;tre &amp; g&eacute;n&egrave;re une lettre cibl&eacute;e &mdash; sans inventer de comp&eacute;tences.</div>
+                                </div>
+                                <button id="btn-tailor-generate" class="btn btn-primary" onclick="triggerPersonalization(activeAppId)"
+                                    style="background: linear-gradient(135deg, #2563eb, #1d4ed8); font-weight: 700; white-space: nowrap;">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i> G&eacute;n&eacute;rer
+                                </button>
+                            </div>
+                            <div id="tailor-spinner" class="hidden" style="margin-top: 14px; display: flex; align-items: center; gap: 10px; font-size: 13px; color: #2563eb;">
+                                <div style="width: 18px; height: 18px; border: 3px solid #bfdbfe; border-top-color: #2563eb; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+                                <span>L'agent personnalise votre CV et lettre... (30-90s)</span>
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div style="border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 14px; background: #fff;">
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                                    <div style="width: 34px; height: 34px; background: linear-gradient(135deg, #dbeafe, #bfdbfe); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fa-solid fa-file-pdf" style="color: #2563eb; font-size: 15px;"></i>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 700; font-size: 13px; color: #0f172a;">CV Personnalis&eacute;</div>
+                                        <div style="font-size: 11px; color: #64748b;" id="tailor-cv-status">Non g&eacute;n&eacute;r&eacute;</div>
+                                    </div>
+                                </div>
+                                <a id="btn-download-cv" href="#" target="_blank"
+                                    style="display: block; text-align: center; padding: 8px; border: 1px solid #e2e8f0; border-radius: 7px; font-size: 12px; color: #64748b; text-decoration: none; opacity: 0.4; pointer-events: none; cursor: not-allowed; transition: all 0.2s;">
+                                    <i class="fa-solid fa-download"></i> T&eacute;l&eacute;charger CV.pdf
+                                </a>
+                            </div>
+                            <div style="border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 14px; background: #fff;">
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                                    <div style="width: 34px; height: 34px; background: linear-gradient(135deg, #dcfce7, #bbf7d0); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fa-solid fa-file-lines" style="color: #16a34a; font-size: 15px;"></i>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 700; font-size: 13px; color: #0f172a;">Lettre de Motivation</div>
+                                        <div style="font-size: 11px; color: #64748b;" id="tailor-letter-status">Non g&eacute;n&eacute;r&eacute;e</div>
+                                    </div>
+                                </div>
+                                <a id="btn-download-letter" href="#" target="_blank"
+                                    style="display: block; text-align: center; padding: 8px; border: 1px solid #e2e8f0; border-radius: 7px; font-size: 12px; color: #64748b; text-decoration: none; opacity: 0.4; pointer-events: none; cursor: not-allowed; transition: all 0.2s;">
+                                    <i class="fa-solid fa-download"></i> T&eacute;l&eacute;charger Lettre.pdf
+                                </a>
+                            </div>
+                        </div>
+                        <div id="tailor-offer-analysis" class="hidden" style="border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; background: #f8fafc;">
+                            <div style="font-weight: 700; font-size: 13px; color: #0f172a; margin-bottom: 10px;">
+                                <i class="fa-solid fa-magnifying-glass-chart" style="color: #2563eb;"></i> Analyse de l'offre par l'IA
+                            </div>
+                            <div id="tailor-analysis-content" style="font-size: 12.5px; color: #334155; line-height: 1.7;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
+                    <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #166534;">
+                        <i class="fa-solid fa-paperclip" style="color: #10b981;"></i>
+                        <span>Pièce jointe : <strong>CV Yousra Khallou.pdf</strong> (attaché automatiquement)</span>
+                    </div>
+                    <span style="font-size: 11px; background: #dcfce7; color: #15803d; font-weight: 700; padding: 2px 8px; border-radius: 10px;">PRÊT</span>
+                </div>
+            </div>
+
+            <div class="modal-footer" style="flex-wrap: wrap; gap: 8px;">
+                <div style="display: flex; gap: 6px; margin-right: auto;">
+                    <button class="btn btn-outline" onclick="updateAppStatus(activeAppId, 'a_postuler'); closeReviewModal();" style="border-color: #bae6fd; color: #0369a1; font-size: 12px; padding: 5px 10px;" title="Passer au statut 'À postuler'">
+                        <i class="fa-solid fa-thumbtack"></i> À postuler
+                    </button>
+                    <button class="btn btn-outline" onclick="updateAppStatus(activeAppId, 'candidature_envoyee'); closeReviewModal();" style="border-color: #bbf7d0; color: #15803d; font-size: 12px; padding: 5px 10px;" title="Marquer comme envoyée avec horodatage">
+                        <i class="fa-solid fa-paper-plane"></i> Marquer envoyée
+                    </button>
+                    <button class="btn btn-outline" onclick="updateAppStatus(activeAppId, 'refus'); closeReviewModal();" style="border-color: #fecaca; color: #b91c1c; font-size: 12px; padding: 5px 10px;" title="Marquer comme refus">
+                        <i class="fa-solid fa-ban"></i> Refus
+                    </button>
+                </div>
+                <button class="btn btn-outline" onclick="copyModalActiveContent()"><i class="fa-regular fa-copy"></i> Copier</button>
+                <button class="btn btn-outline" onclick="openModalMailto()"><i class="fa-regular fa-envelope"></i> Mailto</button>
+                <button class="btn btn-primary" id="btn-modal-send-smtp" onclick="sendModalEmailDirect()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); font-weight: 700;">
+                    <i class="fa-solid fa-paper-plane"></i> ⚡ Envoyer par Gmail
+                </button>
+                <button class="btn btn-success" onclick="approveModalApplication()"><i class="fa-solid fa-check"></i> Valider</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+    <script src="/static/app.js?v=20261010_1500"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+{
+  "full_name": "Yousra Khallou",
+  "title": "Élève ingénieure en Data Engineering & Intelligence Artificielle (ENSAH)",
+  "email": "khallouyoussra84@gmail.com",
+  "phone": "+212 691373401",
+  "location": "Maroc (Mobilité nationale & internationale)",
+  "linkedin_url": "https://www.linkedin.com/in/yousra-khallou",
+  "github_url": "https://github.com/yousra-khallou",
+  "portfolio_url": "https://yousra-khallou.github.io",
+  "sample_cover_letter": "Madame, Monsieur,\n\nActuellement en dernière année du cycle d'ingénieur en Data Engineering & Intelligence Artificielle à l'École Nationale des Sciences Appliquées d'Al-Hoceima (ENSAH), je recherche un stage de fin d'études (PFE) pré-embauche d'une durée de 6 mois, à compter de Janvier 2027.\n\nPassionnée par l'ingénierie des données et le déploiement de modèles d'IA générative à l'échelle, j'ai développé au cours de mon parcours académique et de mes projets personnels une solide maîtrise des pipelines de données (PySpark, Kafka, Airflow), des bases de données distribuées et vectorielles (Qdrant, PostgreSQL, MongoDB) ainsi que des architectures RAG et agents autonomes (LangChain, LangGraph, FastAPI).\n\nRejoindre vos équipes pour mon projet de fin d'études représente une opportunité majeure de mettre mon sens de l'analyse, ma rigueur technique et ma proactivité au service de vos projets Data & IA stratégiques.\n\nJe reste à votre entière disposition pour échanger lors d'un entretien.\n\nCordialement,\nYousra Khallou",
+  "raw_cv_text": "Yousra Khallou - Élève Ingénieure en Data Engineering & Intelligence Artificielle (ENSAH)\nContact: khallouyoussra84@gmail.com | +212 691373401 | GitHub: https://github.com/yousra-khallou | LinkedIn: https://www.linkedin.com/in/yousra-khallou\nDisponibilité: Stage PFE 6 mois (Janvier 2027)\n\nCompétences:\n- Data Engineering: Apache Spark, PySpark, Apache Kafka, Airflow, dbt, Flink, MinIO, SQL, Data Modeling\n- IA & ML: PyTorch, Scikit-learn, XGBoost, Transformers, NLP, RAG, Qdrant, LangChain, LangGraph, LLMOps\n- Développement & DevOps: Python, FastAPI, Flask, Docker, Git, CI/CD, PostgreSQL, MongoDB, Cassandra\n\nProjets GitHub marquants:\n1. Multi-Agent PFE Recruiter: Système multi-agents autonome (LangGraph, FastAPI, LLM) pour la détection et l'automatisation de candidatures.\n2. Enterprise RAG Pipeline: Système RAG complet combinant embeddings Qdrant, reranking sémantique et génération augmentée.\n3. Streaming Big Data Pipeline: Architecture de traitement de flux temps réel avec Kafka, Spark Streaming et stockage distribué.",
+  "pfe_topics_sought": [
+    "Data Engineering & Architecture Big Data (Spark, Kafka, Airflow)",
+    "Intelligence Artificielle Générative & RAG / LLMOps",
+    "Data Analytics & Machine Learning en production"
+  ],
+  "key_skills": [
+    "Python",
+    "PySpark",
+    "Spark",
+    "Apache Kafka",
+    "Apache Airflow",
+    "dbt",
+    "FastAPI",
+    "Docker",
+    "Git",
+    "CI/CD",
+    "RAG",
+    "LangChain",
+    "LangGraph",
+    "LLM APIs",
+    "Qdrant",
+    "PostgreSQL",
+    "MongoDB",
+    "MinIO",
+    "Scikit-learn",
+    "PyTorch",
+    "Transformers",
+    "SQL"
+  ],
+  "top_projects": [
+    {
+      "title": "Système Multi-Agents PFE Automation",
+      "description": "Architecture multi-agents avec LangGraph, FastAPI, LLM et extraction web pour l'automatisation intelligente de candidatures.",
+      "tech_stack": ["Python", "LangGraph", "FastAPI", "Docker", "LLMs"]
+    },
+    {
+      "title": "Pipeline RAG & Recherche Hybride Vectorielle",
+      "description": "Indexation de documents d'entreprise avec Qdrant, embeddings denses et reranker cross-encoder avec API FastAPI.",
+      "tech_stack": ["Python", "Qdrant", "Transformers", "FastAPI"]
+    },
+    {
+      "title": "Data Pipeline Streaming Big Data",
+      "description": "Ingestion continue de flux d'événements avec Kafka, traitement distribué sous PySpark et stockage analytique.",
+      "tech_stack": ["Kafka", "PySpark", "PostgreSQL", "Docker"]
+    }
+  ],
+  "desired_duration": "6 mois",
+  "availability_date": "Janvier 2027"
+}

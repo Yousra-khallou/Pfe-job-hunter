@@ -1,0 +1,32 @@
+# Environnement & Clés API (Confidentiel)
+.env
+*.env
+
+# Cache Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environnements virtuels
+venv/
+.venv/
+env/
+ENV/
+
+# Bases de données & fichiers d'exécution locaux
+candidatures_db.json
+audit_logs.json
+episodic_memory.json
+
+# Fichiers personnels & candidatures générées (CVs, lettres)
+Applications/*.pdf
+Applications/*.docx
+
+# IDE & Éditeurs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
