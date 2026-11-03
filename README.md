@@ -6,40 +6,40 @@
 [![LLM Support](https://img.shields.io/badge/LLM-Google%20Gemini%20%7C%20NVIDIA%20NIM-792ee5.svg)](https://ai.google.dev/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-**PFE AI Job Hunter** est une plateforme autonome d'agents d'intelligence artificielle conçue pour automatiser, orchestrer et hyper-personnaliser la recherche de stages de fin d'études (PFE) et d'opportunités d'ingénierie en Data, Intelligence Artificielle et Software Engineering.
+**PFE AI Job Hunter** is an autonomous multi-agent AI system engineered to discover, score, tailor, and dispatch end-of-studies engineering internships (PFE) and tech job applications.
 
-Grâce à une architecture en graphe d'états (**LangGraph**) et un écosystème de connecteurs multi-sources, l'agent veille en continu, analyse sémantiquement les offres, mène des recherches d'intelligence sur les entreprises cibles, et génère des candidatures sur-mesure prêtes à l'envoi.
+Powered by a reactive state graph (**LangGraph**) and an ecosystem of multi-source connectors, the agent runs continuous market surveillance, performs semantic matching against candidate profiles, conducts automated company OSINT, and drafts high-conversion outreach emails and ATS form payloads ready for dispatch.
 
 ---
 
-## 🏗️ Architecture du Système Multi-Agent
+## 🏗️ Multi-Agent Architecture
 
-Le projet repose sur une synergie d'agents spécialisés coordonnés à la fois en pipeline direct et via un graphe d'états réactif :
+The system coordinates specialized autonomous sub-agents through both independent background workers and an orchestrated **LangGraph StateGraph** pipeline:
 
 ```mermaid
 flowchart TD
-    subgraph Sourcing ["📡 1. Connecteurs & Sourcing Multi-Sources"]
+    subgraph Sourcing ["📡 1. Multi-Source Sourcing & Connectors"]
         W1[LinkedIn Live Crawl]
         W2[Job Boards: Rekrute, WTTJ, ABG...]
-        W3[Boîte Email IMAP / Alertes RH]
-        W4[GitHub Sync & CV Parser PDF]
+        W3[IMAP Email Inbox / Recruiter Alerts]
+        W4[GitHub Sync & PDF Resume Parser]
     end
 
     subgraph CoreGraph ["🧠 2. LangGraph State Workflow"]
-        EXT["🔍 Extractor Agent\n(Dépouillement & Normalisation)"]
-        RES["🏢 Company Researcher Agent\n(Intelligence Économique & Culture Tech)"]
-        MAT["📊 Matcher Agent\n(Scoring Sémantique 0-100% & Gap Analysis)"]
-        COP["✍️ Copywriter & Autofill Agent\n(Rédaction cold email & Payload ATS)"]
+        EXT["🔍 Extractor Agent\n(Entity Extraction & Normalization)"]
+        RES["🏢 Company Researcher Agent\n(OSINT & Tech Culture Intelligence)"]
+        MAT["📊 Matcher Agent\n(Semantic Scoring 0-100% & Gap Analysis)"]
+        COP["✍️ Copywriter & Autofill Agent\n(Cold Email Drafting & ATS Payloads)"]
         
         EXT --> RES
         RES --> MAT
         MAT --> COP
     end
 
-    subgraph ActionAudit ["🚀 3. Exécution, Audit & Mémoire"]
-        MAIL["📧 Gmail SMTP Dispatcher\n(Envoi avec CV PDF joint)"]
-        AUTO["🌐 Browser Automation Agent\n(Mapping & Simulation Formulaire)"]
-        AUD["📝 Audit Logging & Mémoire Épisodique\n(Feedback Loop & Traçabilité)"]
+    subgraph ActionAudit ["🚀 3. Dispatch, Verification & Memory"]
+        MAIL["📧 Gmail SMTP Dispatcher\n(Automated sending with PDF CV attached)"]
+        AUTO["🌐 Browser Automation Agent\n(State-aware Form Simulation & Mapping)"]
+        AUD["📝 Audit Logging & Episodic Memory\n(Feedback Loop & Traceability)"]
     end
 
     Sourcing --> EXT
@@ -51,167 +51,183 @@ flowchart TD
 
 ---
 
-## ✨ Fonctionnalités Clés
+## ✨ Key Features
 
-### 1. 🔍 Détection Multi-Canale & Scraping Intelligent
-- **LinkedIn Connector** : Détection en temps réel des publications de recrutement et mots-clés (`#STAGE_PFE`, `#RECRUTEMENT`).
-- **Job Boards Crawlers** : Scan des plateformes d'emploi (Rekrute, Welcome to the Jungle, Dreamjob, ABG, Emploi.ma).
-- **Email Lead Scanner** : Analyse des alertes reçues dans votre boîte de messagerie via protocole IMAP.
-- **GitHub Sync** : Synchronisation automatique des projets publics et stacks technologiques pour enrichir votre portfolio.
-- **CV Parser PDF** : Extraction instantanée des compétences, formations et réalisations depuis un CV au format PDF.
+### 1. 🔍 Multi-Channel Lead Discovery & Real-Time Crawling
+- **LinkedIn Connector**: Scrapes live posts and recruitment feeds targeting hashtags (`#STAGE_PFE`, `#RECRUTEMENT`, `#HIRING`).
+- **Job Board Crawlers**: Scrapes Moroccan and European platforms (Rekrute, Welcome to the Jungle, Dreamjob, ABG, Emploi.ma).
+- **Email Lead Scanner**: Parses incoming job alerts and inbound recruiter emails via secure IMAP.
+- **GitHub Sync**: Connects to the candidate's GitHub profile to automatically import repositories, tech stacks, and project highlights into the portfolio.
+- **PDF Resume Parser**: Parses and extracts candidate skills, experience, and education from a PDF resume using `pypdf`.
 
-### 2. 🧠 Pipeline LangGraph & Intelligence Économique
-- **Extractor Agent** : Extraction structurée des entités (contacts RH/CTO, intitulé exact, stack exigée, localisation).
-- **Researcher Agent** : Génération d'une fiche d'intelligence sur l'entreprise (secteur, culture technique, actualités, conseils pour l'entretien).
-- **Semantic Matcher** : 
-  - Calcul d'un score de pertinence objectif (0 à 100%).
-  - Alignement point par point entre exigences de l'offre et compétences du candidat.
-  - Sélection automatique du meilleur projet du portfolio à valoriser.
-- **Copywriter Agent** : Rédaction d'e-mails d'approche directe ultra-personnalisés selon la structure : *Accroche ciblée $\rightarrow$ Preuve de valeur technique $\rightarrow$ Appel à l'action précis*.
-- **Autofill Agent** : Préparation de formulaires d'auto-remplissage pour portails ATS d'entreprises.
+### 2. 🧠 LangGraph Pipeline & Company Intelligence
+- **Extractor Agent**: Extracts structured target records (hiring manager/CTO contacts, exact title, tech requirements, location, context).
+- **Researcher Agent**: Gathers corporate intelligence (industry sector, engineering culture, recent news, interview strategies).
+- **Semantic Matcher**:
+  - Computes an objective alignment score (0–100%).
+  - Performs requirement-by-requirement gap analysis against the candidate's background.
+  - Automatically selects the most relevant portfolio project to emphasize.
+- **Copywriter Agent**: Crafts concise, tailored outreach emails following a proven technical conversion framework (*Hook $\rightarrow$ Proof of Value $\rightarrow$ Clear Call-to-Action*).
+- **Autofill Agent**: Pre-fills structured key-value payloads formatted for standard ATS portals (Workday, Lever, Greenhouse).
 
-### 3. ⚡ Dispatch Réel & Dashboard Web Interactif
-- **FastAPI Backend & Dashboard Web** : Interface graphique moderne et réactive pour piloter la veille, visualiser les métriques, ajuster les candidatures et suivre leur statut.
-- **Envoi Réel SMTP** : Expédition directe des candidatures depuis votre boîte Gmail avec votre CV PDF en pièce jointe.
-- **Scheduler Autonome** : Démon d'arrière-plan programmable pour surveiller les opportunités 24/7 selon vos filtres (`search_config.json`).
-- **Traçabilité & Mémoire Épisodique** : Historique complet des actions d'audit et apprentissage contextuel basé sur les retours d'expériences.
+### 3. ⚡ Real Dispatch & Interactive Web Dashboard
+- **FastAPI Backend & Web Dashboard**: Clean modern UI for real-time surveillance, metrics monitoring, application reviews, and status tracking.
+- **Direct SMTP Dispatch**: Sends live emails directly via secure Gmail SMTP with candidate CV dynamically attached.
+- **Autonomous Background Scheduler**: Daemon thread that triggers periodic scans according to customizable parameters (`search_config.json`).
+- **Traceability & Episodic Memory**: Audit trail of every agent action and episodic learning loop that refines subsequent applications.
 
 ---
 
-## 🛠️ Stack Technologique
+## 🛠️ Tech Stack
 
-| Composant | Technologie |
+| Category | Technology |
 | :--- | :--- |
-| **Framework Multi-Agent** | [LangGraph](https://github.com/langchain-ai/langgraph), [LangChain Core](https://python.langchain.com/) |
-| **Moteurs LLM** | Google Gemini (prioritaire) & NVIDIA NIM (Llama 3.3 70B, Mistral, DeepSeek) |
-| **API & Serveur Web** | [FastAPI](https://fastapi.tiangolo.com/), Uvicorn, Pydantic V2 |
-| **Interface Frontend** | HTML5, CSS3 Moderne (Glassmorphism), Vanilla JavaScript |
-| **Extraction & Parsing** | PyPDF, DuckDuckGo Search Live API |
-| **Messagerie & Envoi** | Python IMAP / SMTP SSL Sécurisé |
-| **CLI & Affichage Terminal** | Rich Console |
+| **Agent Orchestration** | [LangGraph](https://github.com/langchain-ai/langgraph) (StateGraph), [LangChain Core](https://python.langchain.com/) |
+| **LLM Engines** | Google Gemini (Primary via OpenAI-compatible endpoint) & NVIDIA NIM (Fallback: Llama 3.3 70B, Mistral, DeepSeek) |
+| **Backend & REST API** | [FastAPI](https://fastapi.tiangolo.com/), Uvicorn, Pydantic V2 |
+| **Frontend Dashboard** | Modern Responsive UI (Glassmorphism, Vanilla JS, CSS3) |
+| **Parsing & Search Engines** | PyPDF, DuckDuckGo Search Live API |
+| **Email Protocol** | Python IMAP / SSL SMTP |
+| **CLI & Formatting** | Rich Console |
 
 ---
 
-## 📁 Structure du Projet
+## 📁 Repository Structure
 
 ```text
 pfe-job-hunter/
 │
-├── agents/                       # Écosystème d'agents autonomes
-│   ├── extractor.py              # Extraction d'opportunités depuis du texte brut
-│   ├── researcher.py             # Veille économique et analyse d'entreprise
-│   ├── matcher.py                # Scoring sémantique offre vs candidat
-│   ├── copywriter.py             # Rédaction d'e-mails à forte conversion
-│   ├── autofill.py               # Génération de payloads pour formulaires
-│   ├── cv_parser.py              # Analyseur de CV PDF
-│   ├── github_connector.py       # Synchronisation des dépôts GitHub du candidat
-│   ├── linkedin_connector.py     # Scan des posts et fils d'actualité LinkedIn
-│   ├── jobboard_connector.py     # Crawl des job boards spécialisés
-│   ├── email_connector.py        # Lecture IMAP et envoi SMTP réel (Gmail)
-│   ├── searcher.py               # Moteur de recherche live multi-critères
-│   ├── web_search_engine.py      # Couche d'interaction moteur de recherche
-│   ├── browser_automation.py     # Automatisation et simulation de formulaires
-│   ├── verifier.py               # Vérification de soumission & mémoire épisodique
-│   └── tailor_agent.py           # Raffinement dynamique des candidatures
+├── agents/                       # Specialized autonomous sub-agents
+│   ├── extractor.py              # Lead entity extraction from raw text
+│   ├── researcher.py             # Company OSINT and business intelligence
+│   ├── matcher.py                # Semantic offer-candidate compatibility scoring
+│   ├── copywriter.py             # High-conversion technical email generator
+│   ├── autofill.py               # ATS form payload generator
+│   ├── cv_parser.py              # PDF resume parser
+│   ├── github_connector.py       # GitHub repository synchronizer
+│   ├── linkedin_connector.py     # Live LinkedIn post scraper
+│   ├── jobboard_connector.py     # Specialized job board crawlers
+│   ├── email_connector.py        # IMAP inbox scanner & real SMTP sender
+│   ├── searcher.py               # Multi-criteria search orchestrator
+│   ├── web_search_engine.py      # DuckDuckGo live search client & parser
+│   ├── browser_automation.py     # State-aware form mapping & browser simulator
+│   ├── verifier.py               # Dispatch verification & episodic memory
+│   └── tailor_agent.py           # Dynamic candidate profile personalizer
 │
-├── static/                       # Frontend Dashboard Web
-│   ├── index.html                # Tableau de bord utilisateur
-│   ├── app.js                    # Logique cliente & interactions API
-│   └── style.css                 # Thème & design moderne
+├── static/                       # Web Dashboard frontend assets
+│   ├── index.html                # Application control center UI
+│   ├── app.js                    # Client-side reactivity & API client
+│   └── style.css                 # Modern responsive styling
 │
-├── config.py                     # Initialisation des providers LLM (Gemini / NVIDIA)
-├── graph.py                      # Définition du graphe d'états LangGraph
-├── models.py                     # Schémas et validation Pydantic V2
-├── server.py                     # Serveur d'application FastAPI
-├── scheduler.py                  # Service d'exécution planifiée en arrière-plan
-├── storage.py                    # Gestionnaire de persistance et journaux d'audit
-├── main.py                       # Interface utilisateur CLI (Rich)
-├── profile_data.json             # Profil technique et portfolio du candidat
-├── search_config.json            # Configuration des critères de recherche et veille
-├── requirements.txt              # Dépendances Python du projet
-└── .env.example                  # Modèle de variables d'environnement
+├── config.py                     # LLM provider initialization (Gemini / NVIDIA)
+├── graph.py                      # LangGraph StateGraph workflow definition
+├── models.py                     # Pydantic V2 models & state schemas
+├── server.py                     # FastAPI application & entrypoint
+├── scheduler.py                  # Background periodic surveillance scheduler
+├── storage.py                    # Persistence manager & audit logger
+├── main.py                       # Interactive CLI interface (Rich)
+├── profile_data.json             # Candidate profile & project portfolio
+├── search_config.json            # Target criteria & scraping configuration
+├── requirements.txt              # Python dependencies
+└── .env.example                  # Environment configuration template
 ```
 
 ---
 
-## 🚀 Installation & Démarrage Rapide
+## 🚀 Quickstart
 
-### 1. Prérequis
-- Python 3.10 ou version supérieure
-- Un compte [Google AI Studio](https://aistudio.google.com/) (pour clé API Gemini gratuite) ou [NVIDIA Build](https://build.nvidia.com/)
+### 1. Prerequisites
+- Python 3.10+
+- A [Google AI Studio API Key](https://aistudio.google.com/) (Gemini) or a [NVIDIA Build API Key](https://build.nvidia.com/)
 
-### 2. Cloner le dépôt et installer les dépendances
+### 2. Clone Repository & Install Dependencies
 
 ```bash
 git clone https://github.com/Yousra-khallou/pfe-job-hunter.git
 cd pfe-job-hunter
 
-# Création d'un environnement virtuel (recommandé)
+# Create virtual environment
 python -m venv .venv
 
-# Activation :
-# Sur Windows :
-.venv\Scripts\activate
-# Sur Linux/macOS :
+# Activate environment:
+# Windows (PowerShell):
+.venv\Scripts\Activate.ps1
+# Linux / macOS:
 source .venv/bin/activate
 
-# Installation des paquets
+# Install dependencies
 pip install -r requirements.txt
 ```
 
-### 3. Configuration des variables d'environnement
+### 3. Environment Variables Configuration
 
-Copiez le fichier exemple :
+Copy the sample environment file:
 ```bash
 cp .env.example .env
 ```
 
-Éditez le fichier `.env` avec vos clés :
+Edit `.env` with your API credentials:
 ```env
-# Provider LLM (Google Gemini recommandé)
+# Primary LLM Provider (Google Gemini recommended)
 LLM_PROVIDER=gemini
-GEMINI_API_KEY=AIzaSy...votre-cle-api-gemini
+GEMINI_API_KEY=AIzaSy...your-gemini-key
 GEMINI_MODEL=gemini-2.5-flash
 
-# Optionnel : Expédition réelle d'e-mails via Gmail
-GMAIL_USER=votre.email@gmail.com
+# Optional: Real Gmail Outbound Email Sending
+GMAIL_USER=your.email@gmail.com
 GMAIL_APP_PASSWORD=xxxx-xxxx-xxxx-xxxx
 ```
 
 ---
 
-## 💻 Utilisation
+## 💻 Running the Application
 
-### Mode 1 : Tableau de bord Web interactif (Recommandé)
+### Option 1: Web Dashboard (Recommended)
 
-Lancez le serveur FastAPI :
+Start the FastAPI application:
 ```bash
 python server.py
 ```
-Ouvrez ensuite votre navigateur sur **[http://localhost:8000](http://localhost:8000)** pour accéder à l'interface complète :
-- Visualisez les métriques et statistiques de vos démarches.
-- Lancez des scans d'offres en direct sur LinkedIn et les Jobboards.
-- Ajustez ou importez votre CV au format PDF en un clic.
-- Évaluez le score de correspondance et révisez les e-mails générés avant leur envoi SMTP.
+*(Or with live-reload: `uvicorn server:app --reload --port 8000`)*
+
+Navigate to **[http://localhost:8000](http://localhost:8000)** in your browser:
+- Trigger multi-channel scrapers on demand (**LinkedIn**, **Job Boards**, **Inbox**).
+- Upload and inspect PDF resumes with automatic parameter extraction.
+- Review semantic scores and customize generated emails before triggering SMTP dispatch.
+- Supervise background surveillance tasks and inspect episodic memory logs.
 
 ---
 
-### Mode 2 : Mode CLI (Terminal interactif)
+### Option 2: Interactive Terminal CLI
 
-Pour une utilisation légère ou scriptée en ligne de commande :
+Run the command-line interface:
 ```bash
 python main.py
 ```
 
 ---
 
-## 🔒 Confidentialité & Bonnes Pratiques
+### Option 3: Manual API / Headless Trigger
 
-- **Protection des secrets** : Les fichiers d'environnement (`.env`), les bases de données d'exécution locales (`candidatures_db.json`, `audit_logs.json`) et les documents personnels (`Applications/*.pdf`) sont exclus par défaut du versioning grâce au fichier `.gitignore`.
-- **Validation humaine (Human-in-the-Loop)** : Le système permet à l'utilisateur de réviser et valider chaque candidature générée avant tout déclenchement d'envoi réel.
+Trigger a full multi-connector scrape and LangGraph workflow via REST API:
+```bash
+curl -X POST http://localhost:8000/api/connectors/scan-all
+```
+
+Run standalone search engine diagnostics:
+```bash
+python test_live_search.py
+```
 
 ---
 
-## 📄 Licence
+## 🔒 Security & Privacy
 
-Ce projet est sous licence [MIT](LICENSE).
+- **Secret Isolation**: Sensitive API credentials (`.env`), runtime databases (`candidatures_db.json`), audit logs (`audit_logs.json`), and personal CV files (`Applications/*.pdf`) are excluded from version control via [`.gitignore`](.gitignore).
+- **Human-in-the-Loop Safeguards**: The system does not dispatch external emails without candidate review and confirmation.
+
+---
+
+## 📄 License
+
+Distributed under the [MIT](LICENSE) License.
