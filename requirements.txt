@@ -1,6 +1,19 @@
+# Core Multi-Agent Framework
 langgraph>=0.2.0
 langchain-openai>=0.2.0
 langchain-core>=0.3.0
 pydantic>=2.0.0
+
+# API & Web Dashboard
+fastapi>=0.100.0
+uvicorn>=0.23.0
+python-multipart>=0.0.9
+
+# Environment & CLI
 python-dotenv>=1.0.0
 rich>=13.0.0
+
+# Document & Web Crawlers
+pypdf>=3.0.0
+duckduckgo_search>=6.0.0
+requests>=2.28.0
